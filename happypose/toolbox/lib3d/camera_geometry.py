@@ -138,3 +138,29 @@ def cropresize_backtransform_points2d(
         1,
     ) + points_2d_normalized * input_wh.unsqueeze(1)
     return points_2d
+
+
+def get_pointcloud(depth, intrinsics, flatten=False, remove_zero_depth_points=True):
+    """Projects depth image to pointcloud.
+
+    Args:
+    ----
+        depth: HxW float array of perspective depth in meters.
+        intrinsics: 3x3 float array of camera intrinsics matrix.
+        flatten: whether to flatten pointcloud
+
+    Returns:
+    -------
+        points: HxWx3 float array of 3D points in camera coordinates.
+    """
+    height, width = depth.shape
+    xlin = np.linspace(0, width - 1, width)
+    ylin = np.linspace(0, height - 1, height)
+    px, py = np.meshgrid(xlin, ylin)
+    px = (px - intrinsics[0, 2]) * (depth / intrinsics[0, 0])
+    py = (py - intrinsics[1, 2]) * (depth / intrinsics[1, 1])
+    points = np.float32([px, py, depth]).transpose(1, 2, 0)
+
+    if flatten:
+        points = np.reshape(points, [height * width, 3])
+    return points

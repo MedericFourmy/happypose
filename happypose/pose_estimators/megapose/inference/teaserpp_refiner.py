@@ -31,9 +31,9 @@ from happypose.pose_estimators.megapose.inference.refiner_utils import (
 from happypose.pose_estimators.megapose.inference.types import PoseEstimatesType
 from happypose.toolbox.lib3d.rigid_mesh_database import BatchedMeshes
 from happypose.toolbox.lib3d.transform_ops import transform_pts_np
+from happypose.toolbox.lib3d.camera_geometry import get_pointcloud
 from happypose.toolbox.renderer.panda3d_batch_renderer import Panda3dBatchRenderer
 from happypose.toolbox.renderer.types import Panda3dLightData
-from happypose.toolbox.visualization.meshcat_utils import get_pointcloud
 
 
 def get_solver_params(noise_bound: float = 0.01):
