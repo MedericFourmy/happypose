@@ -1,3 +1,14 @@
+"""
+This script refines pose estimates stored in a CSV file using the MegaPose refiner model.
+The input CSV file should be in BOP Toolkit results format.
+The refined poses are saved to a new CSV file in the same directory as the input file,
+with "-megapose-refined" appended to the method name in the filename.
+
+Example usage:
+python happypose/pose_estimators/megapose/scripts/run_refinement_from_pose_csv.py ipt_foundpose/coarse-cam0_itoddmv-test.csv  --sensor cam0 --n_best 50
+"""
+
+
 import argparse
 from pathlib import Path
 from collections import defaultdict
@@ -12,35 +23,13 @@ from bop_toolkit_lib.config import datasets_path, results_path
 from bop_toolkit_lib.inout import save_bop_results, load_bop_results, parse_result_filename, load_scene_camera, create_pose_result_filename
 import imageio.v2 as iio
 
-breakpoint()
-
 from happypose.toolbox.inference.types import ObservationTensor
 from happypose.toolbox.utils.load_model import load_named_model
 from happypose.toolbox.inference.types import PoseEstimatesType
 from happypose.toolbox.datasets.datasets_cfg import make_object_dataset
 
 
-# foundpose_feat/refined-3dlong_itoddmv-test.csv
-# foundpose_feat/refined-cam0_itoddmv-test.csv
-# foundpose_feat/refined-cam1_itoddmv-test.csv
-# foundpose_feat/refined-cam2_itoddmv-test.csv
 
-# foundpose_feat/refined-3dlong_itoddmv-test.csv
-# foundpose_feat/refined-cam0_itoddmv-test.csv
-# foundpose_feat/refined-cam1_itoddmv-test.csv
-# foundpose_feat/refined-cam2_itoddmv-test.csv
-
-
-# "ipt_foundpose/coarse-3dlong_itoddmv-test.csv"
-# "ipt_foundpose/coarse-cam0_itoddmv-test.csv"
-# "ipt_foundpose/coarse-cam1_itoddmv-test.csv"
-# "ipt_foundpose/coarse-cam2_itoddmv-test.csv"
-
-
-# nids-foundpose-3dlong_itoddmv-test.csv
-# nids-foundpose-cam0_itoddmv-test.csv
-# nids-foundpose-cam1_itoddmv-test.csv
-# nids-foundpose-cam2_itoddmv-test.csv
 
 def reorganize_results(data):
     result = defaultdict(lambda: defaultdict(lambda: defaultdict(list)))
